@@ -53,9 +53,14 @@ class Game:
         row, col = move.row, move.col
         # TODO: check that the current move has not been played already 
         # and that there is no winner yet. Note that non-played cells
-        # contain an empty string (i.e. ""). 
+        # contain an empty string (i.e. "").
         # Use variables no_winner and move_not_played.
-        
+        if(self._current_moves[row][col].label ==""):
+            move_not_played = True
+            no_winner=not(self.has_winner())
+        else:
+            move_not_played = False
+            no_winner = True
         return no_winner and move_not_played
 
     def process_move(self, move):
@@ -66,6 +71,13 @@ class Game:
         # Do not return any values but set variables  self._has_winner 
         # and self.winner_combo in case of winning combo.
         # Hint: you can scan pre-computed winning combos in self._winning_combos
+        for pair in self._get_winning_combos():
+            if (row,col) in pair:
+                for m in pair:
+                    if(m.label != move.label):
+                        self.has_winner=False
+                        break
+
 
 
     def has_winner(self):
@@ -75,11 +87,21 @@ class Game:
     def is_tied(self):
         """Return True if the game is tied, and False otherwise."""
         # TODO: check whether a tie was reached.
+        tie = True
+        for move in self._current_moves:
+            if(move.label == ""):
+                tie = False
+        if(tie == True and self.has_winner()==False):
+            return True
+        else:
+            return False
         # There is no winner and all moves have been tried.
+
 
     def toggle_player(self):
         """Return a toggled player."""
         # TODO: switches self.current_player to the other player.
+        self.current_player = next(self._players)
         # Hint: https://docs.python.org/3/library/functions.html#next
        
     def reset_game(self):
