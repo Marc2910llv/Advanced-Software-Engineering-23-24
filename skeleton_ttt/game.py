@@ -1,6 +1,7 @@
 from itertools import cycle
 from typing import NamedTuple
 
+
 class Player(NamedTuple):
     label: str
     color: str
@@ -51,13 +52,13 @@ class Game:
     def is_valid_move(self, move):
         """Return True if move is valid, and False otherwise."""
         row, col = move.row, move.col
-        # TODO: check that the current move has not been played already 
+        # TODO: check that the current move has not been played already
         # and that there is no winner yet. Note that non-played cells
         # contain an empty string (i.e. "").
         # Use variables no_winner and move_not_played.
-        if(self._current_moves[row][col].label ==""):
+        if (self._current_moves[row][col].label == ""):
             move_not_played = True
-            no_winner=not(self.has_winner())
+            no_winner = not (self.winner())
         else:
             move_not_played = False
             no_winner = True
@@ -68,19 +69,19 @@ class Game:
         row, col = move.row, move.col
         self._current_moves[row][col] = move
         # TODO: check whether the current move leads to a winning combo.
-        # Do not return any values but set variables  self._has_winner 
+        # Do not return any values but set variables  self._has_winner
         # and self.winner_combo in case of winning combo.
         # Hint: you can scan pre-computed winning combos in self._winning_combos
-        for pair in self._get_winning_combos():
-            if (row,col) in pair:
-                for m in pair:
-                    if(m.label != move.label):
-                        self.has_winner=False
-                        break
+        for combo in self._get_winning_combos():
+            if all(self._current_moves[r][c].label == move.label for r, c in combo):
+                self._has_winner = True
+                self.winner_combo = [self._current_moves[r][c] for r, c in combo]
+                break
+        else:
+            self._has_winner = False
+            self.winner_combo = []
 
-
-
-    def has_winner(self):
+    def winner(self):
         """Return True if the game has a winner, and False otherwise."""
         return self._has_winner
 
@@ -88,22 +89,23 @@ class Game:
         """Return True if the game is tied, and False otherwise."""
         # TODO: check whether a tie was reached.
         tie = True
-        for move in self._current_moves:
-            if(move.label == ""):
-                tie = False
-        if(tie == True and self.has_winner()==False):
+        for m in self._current_moves:
+            for move in m:
+                if (move.label == ""):
+                    tie = False
+                    break
+        if (tie == True and self.winner() == False):
             return True
         else:
             return False
         # There is no winner and all moves have been tried.
-
 
     def toggle_player(self):
         """Return a toggled player."""
         # TODO: switches self.current_player to the other player.
         self.current_player = next(self._players)
         # Hint: https://docs.python.org/3/library/functions.html#next
-       
+
     def reset_game(self):
         """Reset the game state to play again."""
         for row, row_content in enumerate(self._current_moves):

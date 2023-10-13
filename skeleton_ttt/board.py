@@ -63,7 +63,7 @@ class Board(tk.Tk):
             self._game.process_move(move)
             if self._game.is_tied():
                 self._update_display(msg="Tied game!", color="red")
-            elif self._game.has_winner():
+            elif self._game.winner():
                 self._highlight_cells()
                 msg = f'Player "{self._game.current_player.label}" won!'
                 color = self._game.current_player.color
