@@ -1,13 +1,13 @@
-version: '1'
+version: '3'
 services:
   math-service:
     build: ./math_py
     container_name: math-service
-
+  
   string-service:
     build: ./string_py
-    container_name: string-service 
-
+    container_name: string-service
+  
   gateway:
     build: ./gateway
     container_name: gateway

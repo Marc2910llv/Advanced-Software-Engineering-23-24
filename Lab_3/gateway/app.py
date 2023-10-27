@@ -17,7 +17,7 @@ def math(op):
     if op not in ALLOWED_MATH_OPS:
         return make_response('Invalid operation\n', 404)
     try:
-        x = requests.get(MATH_URL + f'/{op}?a={a}&b={b}')
+        x = requests.get(str(MATH_URL) + f'/{op}?a={a}&b={b}')
         x.raise_for_status()
         return x.json()
     except ConnectionError:
@@ -34,9 +34,9 @@ def string(op):
         return make_response('Invalid operation\n', 404)
     try:
         if op == 'lower' or op == 'upper':
-            x = requests.get(STRING_URL + f'/{op}?a={a}')
+            x = requests.get(str(STRING_URL) + f'/{op}?a={a}')
         else:
-            x = requests.get(STRING_URL + f'/{op}?a={a}&b={b}')
+            x = requests.get(str(STRING_URL) + f'/{op}?a={a}&b={b}')
         x.raise_for_status()
         return x.json()
     except ConnectionError:
