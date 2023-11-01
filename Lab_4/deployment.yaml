@@ -16,16 +16,16 @@ spec:
       containers:
       - name: gateway
         imagePullPolicy: Never #flag for image loaded in minikube to avoid pulling from docker hub
-        image: #insert name of image here
+        image: gateway
         ports:
-          - containerPort: #insert gateway port here
+          - containerPort: 5000
 --- 
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
   name: math-service
 spec:
-  replicas: #insert replicas here
+  replicas: 2
   selector: 
     matchLabels:
       app: math-service
@@ -36,16 +36,15 @@ spec:
     spec:
       containers:
       - name: math-service
-        image: #insert image here (if local set the correct flag)
+        image: alebocci/math_py:latest
         ports:
-          - containerPort: # insert math-service port here
---- 
+          - containerPort: 5000
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
   name: string-service
 spec:
-  replicas: #insert replicas here
+  replicas: 2
   selector: 
     matchLabels:
       app: string-service
@@ -56,6 +55,6 @@ spec:
     spec:
       containers:
       - name: string-service
-        image: #insert image here (if local set the correct flag)
+        image: alebocci/string_py:latest
         ports:
-          - containerPort: # insert math-service port here
+          - containerPort: 5000

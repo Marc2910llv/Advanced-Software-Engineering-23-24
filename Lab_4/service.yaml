@@ -4,13 +4,13 @@ kind: Service
 metadata:
   name: gateway
 spec:
-  type: #insert type here
+  type: LoadBalancer|NodePort
   selector: 
     app: gateway
   ports:
     - protocol: TCP
-      port: #insert gateway port here
-      targetPort: #insert gateway target port here
+      port: 5000
+      targetPort: 5000
 ---
 apiVersion: v1
 kind: Service
@@ -21,8 +21,8 @@ spec:
     app: math-service
   ports:
     - protocol: TCP
-      port: #insert gateway port here
-      targetPort: #insert gateway target port here
+      port: 5000
+      targetPort: 5000
 ---
 apiVersion: v1
 kind: Service
@@ -33,5 +33,5 @@ spec:
     app: string-service
   ports:
     - protocol: TCP
-      port: #insert gateway port here
-      targetPort: #insert gateway target port here
+      port: 5000
+      targetPort: 5000
