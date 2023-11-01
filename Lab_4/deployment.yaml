@@ -1,0 +1,61 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: gateway
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+      - name: gateway
+        imagePullPolicy: Never #flag for image loaded in minikube to avoid pulling from docker hub
+        image: #insert name of image here
+        ports:
+          - containerPort: #insert gateway port here
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: math-service
+spec:
+  replicas: #insert replicas here
+  selector: 
+    matchLabels:
+      app: math-service
+  template:
+    metadata:
+      labels:
+        app: math-service
+    spec:
+      containers:
+      - name: math-service
+        image: #insert image here (if local set the correct flag)
+        ports:
+          - containerPort: # insert math-service port here
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: string-service
+spec:
+  replicas: #insert replicas here
+  selector: 
+    matchLabels:
+      app: string-service
+  template:
+    metadata:
+      labels:
+        app: string-service
+    spec:
+      containers:
+      - name: string-service
+        image: #insert image here (if local set the correct flag)
+        ports:
+          - containerPort: # insert math-service port here
