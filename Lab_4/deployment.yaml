@@ -39,6 +39,7 @@ spec:
         image: alebocci/math_py:latest
         ports:
           - containerPort: 5000
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
