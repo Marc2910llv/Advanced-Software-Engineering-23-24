@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_02by7zn" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.17.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
+  <bpmn:process id="LegionFight" name="LegionFight" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:extensionElements />
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0mwi4fc</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0mwi4fc" sourceRef="StartEvent_1" targetRef="number" />
+    <bpmn:userTask id="number" name="Setup">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="legion" label="How big is the legion?" type="long" defaultValue="100" />
+          <camunda:formField id="defendants" label="How big is the defendant army?" type="long" defaultValue="80" />
+          <camunda:formField id="capital" label="How many defenders in the capital?" type="long" defaultValue="50" />
+          <camunda:formField id="legionS" label="How much is strong the legion?" type="long" defaultValue="100" />
+          <camunda:formField id="defendantsS" label="How much are strong the defendants?" type="long" defaultValue="40" />
+          <camunda:formField id="capitalS" label="How much is strong the capital defence?" type="long" defaultValue="60" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0mwi4fc</bpmn:incoming>
+      <bpmn:outgoing>Flow_1cp9qkl</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_1o4temx" name="First Battle" camunda:type="external" camunda:topic="TroopFight">
+      <bpmn:incoming>Flow_1cp9qkl</bpmn:incoming>
+      <bpmn:outgoing>Flow_1exysyd</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1cp9qkl" sourceRef="number" targetRef="Activity_1o4temx" />
+    <bpmn:serviceTask id="Activity_0q4ra92" name="Attack the Capital" camunda:type="external" camunda:topic="Capital">
+      <bpmn:incoming>Flow_0fqtaqe</bpmn:incoming>
+      <bpmn:outgoing>Flow_1856tn5</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1vtg2tf" sourceRef="Activity_0bfwwig" targetRef="Event_1a583x1" />
+    <bpmn:endEvent id="Event_1a583x1">
+      <bpmn:incoming>Flow_1vtg2tf</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_1boadt5" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_0bfwwig" name="Result" camunda:type="external" camunda:topic="Results">
+      <bpmn:incoming>Flow_055hwuk</bpmn:incoming>
+      <bpmn:incoming>Flow_1856tn5</bpmn:incoming>
+      <bpmn:outgoing>Flow_1vtg2tf</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1exysyd" sourceRef="Activity_1o4temx" targetRef="Gateway_1b14koa" />
+    <bpmn:exclusiveGateway id="Gateway_1b14koa">
+      <bpmn:incoming>Flow_1exysyd</bpmn:incoming>
+      <bpmn:outgoing>Flow_0fqtaqe</bpmn:outgoing>
+      <bpmn:outgoing>Flow_055hwuk</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0fqtaqe" sourceRef="Gateway_1b14koa" targetRef="Activity_0q4ra92">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{capitalAttack == 1}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_055hwuk" sourceRef="Gateway_1b14koa" targetRef="Activity_0bfwwig">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{capitalAttack == 0}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1856tn5" sourceRef="Activity_0q4ra92" targetRef="Activity_0bfwwig" />
+    <bpmn:textAnnotation id="TextAnnotation_0485rsy">
+      <bpmn:text>capitalAttack == 1</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_01u9kb6" sourceRef="Flow_0fqtaqe" targetRef="TextAnnotation_0485rsy" />
+    <bpmn:textAnnotation id="TextAnnotation_0uo0u28">
+      <bpmn:text>capitalAttack ==0</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_01kcsli" sourceRef="Flow_055hwuk" targetRef="TextAnnotation_0uo0u28" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="LegionFight">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="209" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_07c0y4b_di" bpmnElement="number">
+        <dc:Bounds x="240" y="187" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0qrwc9l_di" bpmnElement="Activity_1o4temx">
+        <dc:Bounds x="390" y="187" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0uvm80q_di" bpmnElement="Activity_0q4ra92">
+        <dc:Bounds x="610" y="90" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0iyzv74_di" bpmnElement="Event_1a583x1">
+        <dc:Bounds x="922" y="209" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1mrmv0v_di" bpmnElement="Activity_0bfwwig">
+        <dc:Bounds x="770" y="187" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0cvnxwi_di" bpmnElement="Gateway_1b14koa" isMarkerVisible="true">
+        <dc:Bounds x="545" y="202" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0485rsy_di" bpmnElement="TextAnnotation_0485rsy">
+        <dc:Bounds x="440" y="80" width="120" height="26" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0uo0u28_di" bpmnElement="TextAnnotation_0uo0u28">
+        <dc:Bounds x="590" y="280" width="160" height="30" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0mwi4fc_di" bpmnElement="Flow_0mwi4fc">
+        <di:waypoint x="188" y="227" />
+        <di:waypoint x="240" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cp9qkl_di" bpmnElement="Flow_1cp9qkl">
+        <di:waypoint x="340" y="227" />
+        <di:waypoint x="390" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vtg2tf_di" bpmnElement="Flow_1vtg2tf">
+        <di:waypoint x="870" y="227" />
+        <di:waypoint x="922" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1exysyd_di" bpmnElement="Flow_1exysyd">
+        <di:waypoint x="490" y="227" />
+        <di:waypoint x="545" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fqtaqe_di" bpmnElement="Flow_0fqtaqe">
+        <di:waypoint x="570" y="202" />
+        <di:waypoint x="570" y="130" />
+        <di:waypoint x="610" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_055hwuk_di" bpmnElement="Flow_055hwuk">
+        <di:waypoint x="595" y="227" />
+        <di:waypoint x="770" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1856tn5_di" bpmnElement="Flow_1856tn5">
+        <di:waypoint x="710" y="130" />
+        <di:waypoint x="745" y="130" />
+        <di:waypoint x="745" y="227" />
+        <di:waypoint x="770" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_01u9kb6_di" bpmnElement="Association_01u9kb6">
+        <di:waypoint x="572" y="130" />
+        <di:waypoint x="480" y="106" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_01kcsli_di" bpmnElement="Association_01kcsli">
+        <di:waypoint x="683" y="227" />
+        <di:waypoint x="725" y="310" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
