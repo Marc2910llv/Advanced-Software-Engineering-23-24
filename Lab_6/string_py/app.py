@@ -48,7 +48,7 @@ def sendLog(a,b,op,res,URL):
             s = a + ' ' + op + ' ' + b + ' = ' + res + "_from: "+URL
         else:
             s = op + ' ' + a + ' = ' + res + "_from: "+URL
-        x = requests.post(LOG_URL + f'/addLog',json={'time':str(datetime.now()), 'log':s})
+        x = requests.post(LOG_URL + f'/addLog',json={'time':str(datetime.now()), 'log':s}, timeout=10)
         x.raise_for_status()
     except (ConnectionError, HTTPError):
         return 

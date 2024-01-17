@@ -108,7 +108,8 @@ def countLogs(URL):
 @app.route('/ping/<URL>')
 def ping(URL):
     try:
-        r = subprocess.run(f'ping -w 2 -c 3 {URL}', capture_output=True, shell=True)
+        r = subprocess.run(['ping', '-w', '2', '-c', '3', str(URL)], capture_output=True)
+
 
         if b"100% packet loss" in r.stdout:
             return make_response('service is down', 404)
@@ -120,7 +121,7 @@ def ping(URL):
 
 def crashLog():
     try:
-        x = requests.get(LOG_URL + f'/crash')
+        x = requests.get(LOG_URL + f'/crash', timeout=10)
         x.raise_for_status()
         return x.json()
     except ConnectionError:
@@ -130,7 +131,7 @@ def crashLog():
 
 def getLogs():
     try:
-        x = requests.get(LOG_URL + f'/getLogs')
+        x = requests.get(LOG_URL + f'/getLogs', timeout=10)
         x.raise_for_status()
         return x.json()
     except ConnectionError:

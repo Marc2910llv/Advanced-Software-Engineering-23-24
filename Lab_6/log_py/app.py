@@ -5,7 +5,7 @@ import threading, time, os
 
 log_db = "log_db"
 user = "log"
-password = "log"
+password = os.environ.get("LOG_PASSWORD")
 
 app = Flask(__name__, instance_relative_config=True)
 
@@ -48,8 +48,11 @@ def addLog():
     key = payload["time"]
     value = payload["log"]
     with app.app_context():
-        log = db.session.execute(text('SELECT * FROM log WHERE log = \'%s\' AND time = \'%s\''% (value, key))).first()
+        query = text('SELECT * FROM log WHERE log = :value AND time = :key')
+        log = db.session.execute(query, {'value': value, 'key': key}).first()
         if log is None:
+        # Handle the case when log is not found
+
             db.session.add(Log(key, value))
             db.session.commit()
         else:
@@ -61,8 +64,10 @@ def addLog():
 def countLogs(URL):
     # count the number of logs that contain the URL string at the end
     with app.app_context():
-        num = db.session.execute(text('SELECT COUNT(*) FROM log WHERE RIGHT(log, %d) = \'%s\'' % (len(URL),URL) )).scalar()
-    return make_response(jsonify(num),200)
+        query = text('SELECT COUNT(*) FROM log WHERE RIGHT(log, :length) = :url')
+        num = db.session.execute(query, {'length': len(URL), 'url': URL}).scalar()
+
+    return make_response(jsonify(num), 200)
 
 
 def create_app():

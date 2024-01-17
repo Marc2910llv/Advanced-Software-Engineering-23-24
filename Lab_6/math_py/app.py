@@ -19,7 +19,11 @@ def get_input_and_compute(op, name):
     b = request.args.get('b', 0, type=float)
     lst = request.args.get('lst', type=str)
     if lst is not None:
-        lst = eval(lst) # get list from string
+        try:
+            lst = ast.literal_eval(lst)  # Safely evaluate the string
+        except (SyntaxError, ValueError) as e:
+        # Handle the exception or log the error
+            print(f"Error: {e}")
         if (op in [operator.truediv, operator.mod]) and any(x == 0 for x in lst[1:]):
             return make_response('Cannot divide by zero\n', 400)
         value = reduce(op, lst)
@@ -59,7 +63,7 @@ def secure_random(): # is it really secure?
     b = request.args.get('b', 0, type=float)
     a = int(a)
     b = int(b)
-    value = random.randint(a,b)
+    value = secrets.randbelow(b - a + 1) + a
     sendLog(a,b,'randint', value,request.host)
     
     return make_response(jsonify(s=value), 200)
@@ -81,7 +85,7 @@ def create_app():
 def sendLog(a,b,op,res,URL):
     try:
         s = str(a) + ' ' + str(op) + ' ' + str(b) + ' = ' + str(res) + " _from: "+URL
-        x = requests.post(LOG_URL + f'/addLog',json={'time':str(datetime.now()), 'log':s})
+        x = requests.post(LOG_URL + f'/addLog',json={'time':str(datetime.now()), 'log':s}, timeout=10)
         x.raise_for_status()
     except (ConnectionError, HTTPError):
         return 
