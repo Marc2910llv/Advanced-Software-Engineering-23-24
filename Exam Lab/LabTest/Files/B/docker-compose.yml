@@ -1,0 +1,16 @@
+version: '3'
+services:
+  math-service:
+    build: ./math_py
+
+  string-service:
+    build: ./string_py
+
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    ports:
+      - 5000:7000
+    depends_on:
+      - math-service
+      - string-service

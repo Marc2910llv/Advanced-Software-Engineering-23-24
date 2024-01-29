@@ -1,0 +1,10 @@
+-Severity-
+Undefined: 0
+Low: 6
+Medium: 0
+High: 0
+-Confidence-
+Undefined: 0
+Low: 0
+Medium: 0
+High: 6

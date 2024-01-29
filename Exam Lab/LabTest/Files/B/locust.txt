@@ -1,0 +1,3 @@
+How many endpoint were tested? 8
+Which is the slowest endpoint? concat
+Which is the endpoint with the highest error rate? lower
