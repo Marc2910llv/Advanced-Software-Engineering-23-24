@@ -1,0 +1,12 @@
+version: '3'
+services:
+  backend:
+    build: ./code/backend
+
+#add frontend here
+  frontend:
+    build: ./code/frontend
+    container_name: frontend
+    ports:
+      - 5005:8008
+      

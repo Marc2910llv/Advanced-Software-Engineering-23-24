@@ -1,0 +1,118 @@
+1. Dockerfile (3 points)
+In the extracted root folder, create and write the Dockerfile to make the following image:
+• based on the image python:3.9.18-slim,
+• put the content of the code folder inside a folder called YOUR CODE where YOUR CODE is the number
+in the exam header,
+• make that folder the working directory,
+• install Bandit with pip,
+• set the command to run Bandit on the working directory as the initial command of the container.
+Do not add unnecessary commands, e.g. apt-get update. Do not create a directory with mkdir.
+-----------------------------------------------------------------------------------------------------------
+My solution:
+
+FROM python:3.9.18-slim
+ADD code /312499
+WORKDIR /312499
+RUN pip install bandit
+EXPOSE 5000 <<--
+CMD ["bandit", "-r", "/312499"]
+
+Real solution:
+
+FROM python:3.9.18-slim
+COPY code /312499
+WORKDIR /312499
+RUN pip install bandit
+CMD ["bandit", "-r", "/312499"]
+
+//////////////////////////////////////////////////////
+The Dockerfile has an EXPOSE command, but we didn't ask for 
+exposing any port. Score: 0/3 (also it can create a 
+vulnerability to the containerised application)
+//////////////////////////////////////////////////////
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+2. Docker commands and Bandit (4 points)
+In the solution.txt write the commands (without sudo) to
+• create the docker image calling it as aselab,
+• run the container based on such an image and calling it cbandit,
+• check the log of the last 11 lines of the output of Bandit via docker.
+In the same file, answer the two questions about the output of Bandit.
+-----------------------------------------------------------------------------------------------------------
+[Ex 2] First Command (create image) =:= docker build -t aselab .
+[Ex 2] Second Command (run container) =:= docker run --name cbandit aselab
+[Ex 2] Third Command (check output) =:= docker logs -f --tail=11 cbandit
+[Ex 2] Total number of issue found by Bandit =:= 4
+[Ex 2] Number of medium severity issues found by Bandit =:= 2
+
+//////////////////////////////////////////////////////
+The second exercise was correct, score: 4/4.
+//////////////////////////////////////////////////////
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+3. Docker compose and Locust(3 points)
+Complete the docker-compose.yml file by adding the service called frontend and make it reachable from port
+5005 (look in the frontend Dockerfile which port you have to bind).
+Run the application with docker compose. In a different terminal, run locust and use a web browser to
+reach locust’s web service to run performance tests on the application. Analyse the statistics and fill the file
+solutions.txt with the requested results (wait at least 10 seconds to collect significant statistics).
+-----------------------------------------------------------------------------------------------------------
+My solution:
+
+version: '3'
+services:
+  backend:
+    build: ./312449/backend
+
+#add frontend here
+  frontend:
+    build: ./312449/frontend
+    container_name: frontend
+    ports:
+      - 8008:5005
+
+[Ex 3] Name of endpoint with more Locust requests =:= add
+[Ex 3] Name of endpoint with more failed Locust requests =:= add
+
+Real solution:
+
+version: '3'
+services:
+  backend:
+    build: ./code/backend
+
+#add frontend here
+  frontend:
+    build: ./code/frontend <<--
+    container_name: frontend
+    ports:
+      - 5005:8008
+
+[Ex 3] Name of endpoint with more Locust requests =:= add
+[Ex 3] Name of endpoint with more failed Locust requests =:= mul <<--
+
+//////////////////////////////////////////////////////
+In the third exercise you made a mistake in the yml file as 
+"./312449/frontend" is the wrong path to the code 
+(it was "./code/frontend"), the first Locust question is correct
+and the second is wrong (you put "add" but the failing endpoint
+was "mul"). Score: 1/3.
+//////////////////////////////////////////////////////
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+4. Extra (1 point)
+Perform an HTTP GET to the frontend endpoint /secret?X=code, where code is YOUR CODE of the exam
+header. Look for the cookie named secret in the HTTP response and put its value in the solution.txt file
+(without any quotes) answering the Secret question.
+-----------------------------------------------------------------------------------------------------------
+Real solution:
+
+curl http://localhost:5005/secret?X=312449
+
+[Ex 4] Secret =:= 312449
+
+//////////////////////////////////////////////////////
+You didn't answer the question of the fourth exercise. 
+Score: 0/1.
+//////////////////////////////////////////////////////
+-----------------------------------------------------------------------------------------------------------
