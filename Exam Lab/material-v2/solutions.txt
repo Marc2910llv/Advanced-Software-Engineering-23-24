@@ -1,0 +1,9 @@
+Your code =:= 312449
+[Ex 2] First Command (create image) =:= docker build -t aselab .
+[Ex 2] Second Command (run container) =:= docker run --name cbandit aselab
+[Ex 2] Third Command (check output) =:= docker logs -n=11 -f cbandit
+[Ex 2] Total number of issue found by Bandit =:= 4
+[Ex 2] Number of medium severity issues found by Bandit =:= 2
+[Ex 3] Name of endpoint with more Locust requests =:= add
+[Ex 3] Name of endpoint with more failed Locust requests =:= mul
+[Ex 4] Secret =:= 312449
